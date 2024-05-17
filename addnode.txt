@@ -1,0 +1,34 @@
+Configure SSH for oracle and grid users on all nodes :
+
+
+hostnamectl set-hostname rac3.com
+prepare the node.
+
+xhost +
+su - grid
+export DISPLAY=:0
+cd $ORACLE_HOME
+
+./gridSetup.sh 
+add more nodes to the cluster
+provide hostname and rac-vip
+setup SSH connectivity
+run fixups in rac3.. and ignore all
+next and start installation
+run root scripts in node3
+
+2. Extend oracle database home to new node using addnode.sh
+— Run from existing node
+cd $ORACLE_HOME/addnode
+./addnode.sh "CLUSTER_NEW_NODES={rac3}"
+select nodename and next
+
+3. Add the instance on node using dbca utility( run on existing node)
+cd $ORACLE_HOME/bin
+
+./dbca
+
+ORACLE RAC database instance managment
+add an instance
+
+srvctl start instance -d ORADB -i ORADB3

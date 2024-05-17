@@ -10,6 +10,17 @@
 mkdir -p /u01/app/oracle/product/19.0.0.0/dbhome_1
 chmod 777 /u01
 chown -R oracle:oinstall /u01
+
+    
+        
+          
+    
+
+        
+        Expand All
+    
+    @@ -17,202 +23,127 @@ chown -R oracle: /u01
+  
 go to software location
 unzip V982063-01_19c_db.zip -d /u01/app/oracle/product/19.0.0.0/dbhome_1/
 chmod -R 777 /u01
@@ -43,19 +54,19 @@ end;
 =================================
 
 exec dbms_stats.gather_fixed_objects_stats;
- 
+
 exec dbms_stats.gather_schema_stats ('SYSTEM');
- 
+
 exec dbms_stats.gather_schema_stats ('SYS');
- 
+
 exec dbms_stats.gather_dictionary_stats;
- 
+
 ==============================
 1.5: Active Backup Validation:
 ==============================
 
 SELECT * FROM v$recover_file;
- 
+
 SELECT * FROM v$backup WHERE status != 'NOT ACTIVE';
 
 ========================================
@@ -79,7 +90,7 @@ select owner, count(*) from dba_objects where status <> 'VALID'group by owner;
 set lines 333 pages 111
 col COMP_NAME form a55
 select comp_name, version, status from dba_registry;
- 
+
 =============================== 
 1.10: Empty Database Recyclebin:
 ===============================
@@ -97,7 +108,7 @@ COL PROPERTY_VALUE FOR A21
 Select version from v$timezone_file;
 
 select PROPERTY_NAME,PROPERTY_VALUE from database_properties where property_name ='DST_PRIMARY_TT_VERSION';
- 
+
 show parameter cluster_database
 
 ================ 
@@ -162,7 +173,7 @@ select open_mode,status from v$database,v$instance;
 =====================================
 2 :  run DBUPGRADE Script
 =====================================
- 
+
 nohup $ORACLE_HOME/bin/dbupgrade -n 2 -l /u01/upgradelogs &
 
 ======================
@@ -190,29 +201,3 @@ SQL> select count(*) from  cdb_objects where status ='INVALID';
 @/u01/upgradelogs/postupgrade_fixups.sql
 
 @?/rdbms/admin/utlrp.sql
-
-ALTER SESSION SET CONTAINER=HRMS;
-
-@?/rdbms/admin/utlrp.sql
-
-@$ORACLE_HOME/rdbms/admin/utlusts.sql
-
-=================
-UPGRADE TIMEZONE:
-=================
-
-Select version from v$timezone_file;
-
-@$ORACLE_HOME/rdbms/admin/utltz_upg_check.sql
-
-@$ORACLE_HOME/rdbms/admin/utltz_upg_apply.sql
-
-COL NAME FOR A25
-COL GUARANTEE_FLASHBACK_DATABASE FOR A31
-select NAME,GUARANTEE_FLASHBACK_DATABASE,TIME from V$restore_point;
-
-drop restore point pre_upgrade;
-
-show parameter compatible
-
-alter system set compatible = '19.0.0' scope =spfile;
