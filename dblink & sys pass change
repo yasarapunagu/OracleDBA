@@ -1,0 +1,37 @@
+select username,created from dba_users order by created;
+
+
+grant create database link to srinivas;
+create database link db_link_1 connect to suresh identified by suresh123 using 'to_goutham';
+
+
+
+desc dba_db_links;
+select DB_LINK,OWNER,USERNAME,HOST from dba_db_links;
+
+
+other database/ Username:suresh /tablename:hdfc_loans/dblinkname: db_link_1
+
+desc suresh.hdfc_loans@db_link_1;
+select * from hdfc_loans@db_link_1;
+insert into mounika.hdfc@db_link_3 values (7);
+
+
+
+
+sys user password change:
+orapwd file=/u01/app/oracle/product/19.0.0.0/dbhome_1/dbs/<passwd file name>/  passsword=<new password> entries=3 force=y
+
+
+
+
+
+
+
+
+
+
+
+
+
+
